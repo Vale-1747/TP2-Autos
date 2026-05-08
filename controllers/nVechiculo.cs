@@ -116,7 +116,20 @@ namespace alquiler_de_autos.controllers
             Console.WriteLine("El vehículo se ha modificado con éxito.");
         }
 
-        public void listarVehiculos() {}
+        public void listarVehiculos()
+        {
+            if (listaVehiculos.Count == 0)
+            {
+                Console.WriteLine("No hay vehículos registrados.");
+                return;
+            }
+
+            Console.WriteLine("      --Lista de vehículos--      ");
+            foreach (Vehiculo v in listaVehiculos)
+            {
+                Console.WriteLine(v);
+            }
+        }
 
         public void exportarVehiculos() {}
 
@@ -165,6 +178,17 @@ namespace alquiler_de_autos.controllers
                 }
             }
             return null;
+        }
+
+        public override string toString()
+        {
+            return
+                "Patente: " + patente +
+                "\nMarca: " + marca +
+                "\nModelo: " + modelo +
+                "\nAño: " + anio +
+                "\nDisponible: " + 
+                (disponible ? "Si" : "No");
         }
     }
 }
