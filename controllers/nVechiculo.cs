@@ -131,7 +131,28 @@ namespace alquiler_de_autos.controllers
             }
         }
 
-        public void exportarVehiculos() {}
+        public void exportarVehiculos()
+        {
+            if (listarVehiculos.Count == 0)
+            {
+                Console.Write("No hay vehículos cargados para exportar.");
+                return;
+            }
+
+            StreamWriter archivo = new StreamWriter("exports/vehiculos.txt");
+
+            archivo.WriteLine("Lista de vehículos:");
+            
+            foreach (Vehiculo v in listarVehiculos)
+            {
+                archivo.WriteLine("------------------------------");
+                archivo.WriteLine(v.toString());
+            }
+
+            archivo.Close();
+
+            Console.WriteLine("Los vehículos se han exportado con éxito.");
+        }
 
         //este metodo verifica que los campos no esten vacios
         public bool validarCampos(string patente, string marca, string modelo)
