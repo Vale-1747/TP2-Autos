@@ -167,6 +167,12 @@ namespace alquiler_de_autos.controllers
                 Console.Write("No hay vehículos cargados para exportar.");
                 return;
             }
+            //agrego esto para que si no tiene la carpeta, se cree una asi no falla el programa.
+            string nombreCarpeta = "exports";
+            if (!Directory.Exists(nombreCarpeta))
+            {
+                Directory.CreateDirectory(nombreCarpeta);
+            }
 
             StreamWriter archivo = new StreamWriter("exports/vehiculos.txt");
 

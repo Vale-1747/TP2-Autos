@@ -1,0 +1,7 @@
+Lista de vehículos:
+------------------------------
+Patente: b585984
+Marca: Chevrolet
+Modelo: Camaro
+Año: 2012
+Disponible: Si
