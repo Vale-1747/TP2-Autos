@@ -1,6 +1,7 @@
 using alquiler_de_autos.models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace alquiler_de_autos.controllers
 {
@@ -92,7 +93,13 @@ namespace alquiler_de_autos.controllers
         public void vehiculosDisponibles(List<Vehiculo> listaVehiculos)
         {
             Console.Write("Ingrese fecha: ");
-            DateTime fecha = DateTime.Parse(Console.ReadLine());
+            DateTime fecha;
+
+            while(!DateTime.TryParse(Console.ReadLine(), out fecha))
+            {
+                Console.WriteLine("Fecha inválida. Intente nuevamente.");
+                return;
+            }
 
             foreach (Vehiculo v in listaVehiculos)
             {

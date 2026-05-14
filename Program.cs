@@ -70,15 +70,19 @@ namespace alquiler_de_autos
                 switch (Console.ReadLine())
                 {
                     case "1":
-                    Console.Write("DNI: "); string DNI = Console.ReadLine();
-                    Console.Write("Nombre: "); string Nombre = Console.ReadLine();
-                    Console.Write("Apellido: "); string Apellido = Console.ReadLine();
-                    Console.Write("Email: "); string Email = Console.ReadLine();
+                        Console.Clear();
+                        Console.WriteLine("=== AGREGAR CLIENTE ===");
+                        Console.Write("DNI: "); string DNI = Console.ReadLine();
+                        Console.Write("Nombre: "); string Nombre = Console.ReadLine();
+                        Console.Write("Apellido: "); string Apellido = Console.ReadLine();
+                        Console.Write("Email: "); string Email = Console.ReadLine();
 
                         if (gestion.AgregarCliente(DNI, Nombre, Apellido, Email))
                             Console.WriteLine("Cliente agregado correctamente.");
                         break;
                     case "2":
+                        Console.Clear();
+                        Console.WriteLine("=== LISTA DE CLIENTES ===");
                         gestion.ListarClientes();
                         break;
                     case "3":
@@ -91,7 +95,7 @@ namespace alquiler_de_autos
                         Console.WriteLine("Opcion no valda.");
                         break;
                 }
-                if (!volver) { Console.WriteLine("\nPresione cualquier tecla para continuar..."); Console.ReadKey(); }
+                if (!volver) { Console.WriteLine("\nPresione una tecla para volver atras..."); Console.ReadKey(); }
             }
         }
 
@@ -119,7 +123,7 @@ namespace alquiler_de_autos
                     case "5": gestionVehiculos.exportarVehiculos(); break;
                     case "6": volver = true; break;
                 }
-                if (!volver) { Console.WriteLine("\nPresione una tecla..."); Console.ReadKey(); }
+                if (!volver) { Console.WriteLine("\nPresione una tecla para volver atras..."); Console.ReadKey(); }
             }
         }
 
@@ -139,19 +143,26 @@ namespace alquiler_de_autos
                 switch (Console.ReadLine())
                 {
                     case "1":
+                        Console.Clear();
+                        Console.WriteLine("=== CREAR RESERVA ===");
+                        // Por ahora lo dejamos marcado para conectar después
                         gestionReservas.crearReserva(gestion, gestionVehiculos);
                         break;
                     case "2":
+                        Console.Clear();
+                        Console.WriteLine("=== LISTA DE RESERVAS ===");
                         gestionReservas.listarReservas();
                         break;
                     case "3":
+                        Console.Clear();
+                        Console.WriteLine("=== DISPONIBILIDAD POR FECHA ===");
                         gestionReservas.vehiculosDisponibles(gestionVehiculos.listaVehiculos);
                         break;
                     case "4":
                         volver = true;
                         break;
                 }
-                if (!volver) { Console.WriteLine("\nPresione una tecla..."); Console.ReadKey(); }
+                if (!volver) { Console.WriteLine("\nPresione una tecla para volver atras..."); Console.ReadKey(); }
             }
         }
 
