@@ -25,7 +25,7 @@ namespace alquiler_de_autos
                 Console.WriteLine("2. Gestión de Vehículos");
                 Console.WriteLine("3. Gestión de Reservas");
                 Console.WriteLine("4. Reportes");
-                Console.WriteLine("0. Salir");
+                Console.WriteLine("5. Salir");
                 Console.Write("\nSeleccione una opción: ");
 
                 switch (Console.ReadLine())
@@ -42,7 +42,7 @@ namespace alquiler_de_autos
                     case "4":
                         MenuReportes(gestionReportes, gestionReservas);
                         break;
-                    case "0":
+                    case "5":
                         salir = true;
                         break;
                     default:
@@ -145,7 +145,7 @@ namespace alquiler_de_autos
                     case "1":
                         Console.Clear();
                         Console.WriteLine("=== CREAR RESERVA ===");
-                        // Por ahora lo dejamos marcado para conectar después
+
                         gestionReservas.crearReserva(gestion, gestionVehiculos);
                         break;
                     case "2":
@@ -179,7 +179,7 @@ namespace alquiler_de_autos
                 Console.WriteLine("1- Vehiculos mas usados");
                 Console.WriteLine("2- Clientes que mas alquilan");
                 Console.WriteLine("3- Exportar reporte");
-                Console.WriteLine("0- Volver");
+                Console.WriteLine("5- Volver");
                 Console.Write("\nSeleccione una opción: ");
 
                 opcion = Console.ReadLine();
