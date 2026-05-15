@@ -198,7 +198,7 @@ namespace alquiler_de_autos
                 Console.WriteLine("1- Vehiculos mas usados");
                 Console.WriteLine("2- Clientes que mas alquilan");
                 Console.WriteLine("3- Exportar reporte");
-                Console.WriteLine("5- Volver");
+                Console.WriteLine("4- Volver");
                 Console.Write("\nSeleccione una opción: ");
 
                 opcion = Console.ReadLine();
@@ -217,6 +217,7 @@ namespace alquiler_de_autos
                         gestionReportes.ExportarReporte(reservas);
                         break;
                     case "4":
+                    //agregar para que funcione la vuelta
                         break;
                         
                     default:
@@ -224,15 +225,20 @@ namespace alquiler_de_autos
                         break;
                 }
                 
-                if (opcion != "0")
+                if (opcion != "4")
                 {
                     Console.WriteLine("\nPresione una tecla para continuar...");
                     Console.ReadKey();
                 }
 
 
+<<<<<<< HEAD
             } while (opcion != "0");
         }*/
+=======
+            } while (opcion != "4");
+        }
+>>>>>>> 4079c69855401219a58e64bc79cc0bb30215ae87
 
 
     }

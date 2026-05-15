@@ -175,7 +175,7 @@ namespace alquiler_de_autos.controllers
                 Directory.CreateDirectory(nombreCarpeta);
             }
 
-            StreamWriter archivo = new StreamWriter("exports/vehiculos.txt");
+            StreamWriter archivo = new StreamWriter("exports/vehiculos.csv");
 
             archivo.WriteLine("Lista de vehículos:");
             

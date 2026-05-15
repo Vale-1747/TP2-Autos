@@ -69,9 +69,17 @@ namespace alquiler_de_autos.controllers
             {
                 lineas.Add($"Auto: {r.vehiculo.patente} | Cliente: {r.cliente.DNI} | Desde: {r.fechaInicio.ToShortDateString()}");
             }
+            
+            string nombreCarpeta = "exports";
+            
+                if (!Directory.Exists(nombreCarpeta))  
+                {
+                    Directory.CreateDirectory(nombreCarpeta);
+                }
+
+                using (StreamWriter writer = new StreamWriter("exports/reporteAlquileres.csv"))
     
-            exportador.ExportarTXT(lineas, "reporteAlquileres.txt");
-            Console.WriteLine("Archivo ' reporteAlquileres.txt' exportado con éxito.");
+            Console.WriteLine("Archivo ' reporteAlquileres' exportado con éxito.");
         }
 
         public static void Menu()

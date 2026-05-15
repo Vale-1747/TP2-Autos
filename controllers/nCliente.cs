@@ -59,15 +59,22 @@ namespace alquiler_de_autos.controllers
         {
             try
             {
-                using (StreamWriter writer = new StreamWriter(rutaArchivo))
+                string nombreCarpeta = "exports";
+                if (!Directory.Exists(nombreCarpeta))  
+                {
+                    Directory.CreateDirectory(nombreCarpeta);
+                }
+
+                using (StreamWriter writer = new StreamWriter("exports/clientes_exportados.csv"))
                 {
                     writer.WriteLine("DNI;Nombre;Apellido;Email");
+
                     foreach (var c in clientes)
                     {
                         writer.WriteLine($"{c.DNI};{c.Nombre};{c.Apellido};{c.Email}");
                     }
                 }
-                Console.WriteLine($"\nÉxito: Datos exportados a {rutaArchivo}");
+                Console.WriteLine($"\nÉxito: Datos exportados a exports/clientes_exportados.csv");
             }
             catch (Exception ex)
             {
