@@ -2,18 +2,21 @@ using alquiler_de_autos.models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using Libreria2026;
 
 namespace alquiler_de_autos.controllers
 {
     public class nReserva
     {
-        private List<Reserva> listaReservas { get; set;} = new List<Reserva>();
+        private static List<Reserva> listaReservas { get; set;} = new List<Reserva>();
+
+        private static List<Vehiculo> listaVehiculos { get; set;} = new List<Vehiculo>();
 
         public List<Reserva> GetReservas()
         {
             return listaReservas;
         }
-        public void listarReservas()
+        public static void listarReservas()
         {
             if(listaReservas.Count == 0)
             {
@@ -27,7 +30,7 @@ namespace alquiler_de_autos.controllers
             }
         }
 
-        public bool validarFechas(Vehiculo vehiculo, DateTime desde, DateTime hasta)
+        public static bool validarFechas(Vehiculo vehiculo, DateTime desde, DateTime hasta)
         {
             foreach (Reserva r in listaReservas)
             {
@@ -42,11 +45,11 @@ namespace alquiler_de_autos.controllers
             return true;
         }
             //hago un cambio aca poruqe program no tiene los objetos vehiculo y cliente, solo tiene las listas.
-        public void crearReserva(GestionClientes gestion, nVehiculo gestionVehiculos)
+        public static void crearReserva()
         {
             Console.Write ("Ingrese DNI del cliente: ");
             string dni = Console.ReadLine();
-            Cliente cliente = gestion.BuscarPorDNI(dni);
+            Cliente cliente = nCliente.BuscarPorDNI(dni);
 
             if (cliente == null)
             {
@@ -56,7 +59,7 @@ namespace alquiler_de_autos.controllers
 
             Console.Write("Ingrese patente del vehículo: ");
             string patente = Console.ReadLine();
-            Vehiculo vehiculo = gestionVehiculos.buscarVehiculo(patente);
+            Vehiculo vehiculo = nVehiculo.buscarVehiculo(patente);
 
             if (vehiculo == null)
             {
@@ -90,8 +93,9 @@ namespace alquiler_de_autos.controllers
         }
         
 
-        public void vehiculosDisponibles(List<Vehiculo> listaVehiculos)
+        public static void vehiculosDisponibles()
         {
+            Console.Clear();
             Console.Write("Ingrese fecha: ");
             DateTime fecha;
 
@@ -117,6 +121,20 @@ namespace alquiler_de_autos.controllers
                 {
                     Console.WriteLine(v);
                 }
+            }
+        }
+
+        public static void Menu()
+        {
+            Console.Clear();
+            string[] opciones = {"Crear","Listar","Ver Disponibilidad por fecha","Volver"};
+            int seleccion = Herramienta.MenuSeleccionar(opciones,1,"Gestión de Reservas");
+            switch(seleccion)
+            {
+                case 1: crearReserva(); Menu(); break;
+                case 2: listarReservas(); Menu(); break;
+                case 3: vehiculosDisponibles(); Menu(); break;
+                case 4: return;
             }
         }
 

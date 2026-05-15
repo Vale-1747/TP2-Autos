@@ -1,14 +1,18 @@
 ﻿using System;
 using alquiler_de_autos.controllers;
 using alquiler_de_autos.models;
-
+using Libreria2026;
+using System.Text.RegularExpressions;
 
 namespace alquiler_de_autos
 {
     class Program
     {
+        public static Pila<string> historial = new Pila<string>();
         static void Main(string[] args)
         {
+            Menu();
+            /*
             Console.WriteLine("Hello, World!");
             GestionClientes gestion = new GestionClientes();
             nVehiculo gestionVehiculos = new nVehiculo();
@@ -50,10 +54,25 @@ namespace alquiler_de_autos
                         Console.ReadKey();
                         break;
                 }
+            }*/
+        }
+
+        public static void Menu()
+        {
+            Console.Clear();
+            string[] opciones = {"Clientes","Vehiculos","Reservas","Reportes","Salir"};
+            int seleccion = Herramienta.MenuSeleccionar(opciones,1,"Alquiler de Vehículos");
+            switch(seleccion)
+            {
+                case 1: historial.Push("Clientes"); nCliente.Menu(); Menu(); break;
+                case 2: historial.Push("Vehiculos"); nVehiculo.Menu(); Menu(); break;
+                case 3: historial.Push("Reservas"); nReserva.Menu(); Menu(); break;
+                case 4: historial.Push("Reportes"); nReportes.Menu(); Menu(); break;
+                case 5: return;
             }
         }
                 
-
+/*
         static void MenuClientes(GestionClientes gestion)
         {
             bool volver = false;
@@ -127,7 +146,7 @@ namespace alquiler_de_autos
             }
         }
 
-        static void MenuReservas(nReserva gestionReservas, GestionClientes gestion, nVehiculo gestionVehiculos)
+        static void MenuReservas(nReserva gestionReservas, nCliente gestion, nVehiculo gestionVehiculos)
         {
             bool volver = false;
             while (!volver)
@@ -213,7 +232,7 @@ namespace alquiler_de_autos
 
 
             } while (opcion != "0");
-        }
+        }*/
 
 
     }

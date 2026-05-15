@@ -2,14 +2,15 @@ using alquiler_de_autos.models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Libreria2026;
 
 namespace alquiler_de_autos.controllers
 {
     public class nVehiculo
     {
-        public List<Vehiculo> listaVehiculos = new List<Vehiculo>();
+        public static List<Vehiculo> listaVehiculos = new List<Vehiculo>();
 
-        public void altaVehiculo()
+        public static void altaVehiculo()
         {
             Console.Clear();
 
@@ -54,7 +55,7 @@ namespace alquiler_de_autos.controllers
             Console.WriteLine("El vehículo se ha agregado con exito.");
         }
 
-        public void bajaVehiculo()
+        public static void bajaVehiculo()
         {
             Console.Clear();
 
@@ -80,7 +81,7 @@ namespace alquiler_de_autos.controllers
             Console.WriteLine("El vehículo se ha dado de baja con éxito.");
         }
 
-        public void modificarVehiculo()
+        public static void modificarVehiculo()
         {
             Console.Clear();
 
@@ -143,7 +144,7 @@ namespace alquiler_de_autos.controllers
             Console.WriteLine("El vehículo se ha modificado con éxito.");
         }
 
-        public void listarVehiculos()
+        public static void listarVehiculos()
         {
             Console.Clear();
 
@@ -160,7 +161,7 @@ namespace alquiler_de_autos.controllers
             }
         }
 
-        public void exportarVehiculos()
+        public static void exportarVehiculos()
         {
             if (listaVehiculos.Count == 0)
             {
@@ -190,7 +191,7 @@ namespace alquiler_de_autos.controllers
         }
 
         //este metodo verifica que los campos no esten vacios
-        public bool validarCampos(string patente, string marca, string modelo)
+        public static bool validarCampos(string patente, string marca, string modelo)
         {
             if(string.IsNullOrWhiteSpace(patente) || string.IsNullOrWhiteSpace(marca) || string.IsNullOrWhiteSpace(modelo))
             {
@@ -200,7 +201,7 @@ namespace alquiler_de_autos.controllers
         }
 
         //este método verifica que haya patenta para que no haya patentes duplicadas
-        public bool existePatente(string patente)
+        public static bool existePatente(string patente)
         {
             foreach (Vehiculo v in listaVehiculos)
             {
@@ -213,7 +214,7 @@ namespace alquiler_de_autos.controllers
         }
 
         //este metodo valida que el año que se ingresa tiene sentido para que no se guarde cualquier valor
-        public bool validarAnio(int anio)
+        public static bool validarAnio(int anio)
         {
             //decidimos que sean validos años mayores a 1950 hasta el año actual
             if(anio < 1950 || anio > DateTime.Now.Year)
@@ -224,7 +225,7 @@ namespace alquiler_de_autos.controllers
         }
 
 
-        public Vehiculo buscarVehiculo(string patente)
+        public static Vehiculo buscarVehiculo(string patente)
         {
             foreach (Vehiculo v in listaVehiculos)
             {
@@ -236,6 +237,20 @@ namespace alquiler_de_autos.controllers
             return null;
         }
 
-       
+        public static void Menu()
+        {
+            Console.Clear();
+            string[] opciones = { "Agregar", "Eliminar", "Modificar", "Listar", "Exportar", "Volver" };
+            int seleccion = Herramienta.MenuSeleccionar(opciones, 1, "Gestión de Vehículos");
+            switch (seleccion)
+            {
+                case 1: altaVehiculo(); Menu(); break;
+                case 2: bajaVehiculo(); Menu(); break;
+                case 3: modificarVehiculo(); Menu(); break;
+                case 4: listarVehiculos(); Menu(); break;
+                case 5: exportarVehiculos(); Menu(); break;
+                case 6: return;
+            }
+        }       
     }
 }

@@ -5,44 +5,57 @@ using System.Linq;
 using System.IO;   // Para StreamWriter
 using System.Linq;
 using alquiler_de_autos.models;
+using Libreria2026;
 
 namespace alquiler_de_autos.controllers
 {
-    public class GestionClientes
+    public class nCliente
     {
-        private List<Cliente> clientes = new List<Cliente>();
-        private string rutaArchivo = "clientes_exportados.csv";
+        private static List<Cliente> clientes = new List<Cliente>();
+        private static string rutaArchivo = "clientes_exportados.csv";
 
         //para agregar un cliente nuevo
-        public bool AgregarCliente(string dni, string nombre, string apellido, string email)
+        public static void AgregarCliente()
         {
+            Console.Clear();
+            Console.Write("Nombre: ");
+            string nombre = Console.ReadLine();
+            Console.Write("Apellido: ");
+            string apellido = Console.ReadLine();
+            Console.Write("Email: ");
+            string email = Console.ReadLine();
+            Console.Write("DNI: ");
+            string dni = Console.ReadLine();
+            
             // datos que si o si precisamos
             if (string.IsNullOrWhiteSpace(dni) || string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellido))
             {
                 Console.WriteLine("Error: DNI, Nombre y Apellido son obligatorios.");
-                return false;
+                return;
             }
 
             // con esto validas el DNI para que no se repita
             if (clientes.Any(c => c.DNI == dni))
             {
                 Console.WriteLine("Error: Ya existe un cliente con ese DNI.");
-                return false;
+                return;
             }
 
             clientes.Add(new Cliente { DNI = dni, Nombre = nombre, Apellido = apellido, Email = email });
-            return true;
+            Console.WriteLine("Se ha agregado el nuevo cliente con exito.");
+            return;
         }
 
         // el listado de clientes
-        public void ListarClientes()
+        public static void ListarClientes()
         {
+            Console.Clear();
             if (clientes.Count == 0) Console.WriteLine("No hay clientes registrados.");
             else clientes.ForEach(c => Console.WriteLine(c.ToString()));
         }
 
         // para exportar a un archivo de texto
-        public void ExportarAArchivo()
+        public static void ExportarAArchivo()
         {
             try
             {
@@ -62,10 +75,23 @@ namespace alquiler_de_autos.controllers
             }
         }
 
-        public Cliente BuscarPorDNI(string dni)
+        public static Cliente BuscarPorDNI(string dni)
         {
             return clientes.Find(c => c.DNI == dni);
         }
         
+        public static void Menu()
+        {
+            Console.Clear();
+            string[] opciones = {"Agregar","Listar","Exportar","Salir"};
+            int seleccion = Herramienta.MenuSeleccionar(opciones,1,"Gestión de Clientes");
+            switch (seleccion)
+            {
+                case 1: AgregarCliente(); Menu(); break;
+                case 2: ListarClientes(); Menu(); break;
+                case 3: ExportarAArchivo(); Menu(); break;
+                case 4: return;
+            }
+        }
     }
 }

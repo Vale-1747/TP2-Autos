@@ -2,14 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using alquiler_de_autos.models;
+using Libreria2026;
 
 namespace alquiler_de_autos.controllers
 {
     public class nReportes
     {
-        Exportador exportador = new Exportador();
+        private static Exportador exportador = new Exportador();
+        private static List<Reserva> reservas = new List<Reserva>();
         
-        public void VehiculosMasUsados(List<Reserva> reservas)
+        public static void VehiculosMasUsados()
         {
             Console.WriteLine("Vehiculos mas usados");
             if (reservas.Count == 0)
@@ -33,7 +35,7 @@ namespace alquiler_de_autos.controllers
             }
         }
 
-        public void ClientesQueMasAlquilan(List<Reserva> reservas)
+        public static void ClientesQueMasAlquilan()
         {
             Console.WriteLine("Clientes Frecuentes");
             if (reservas.Count == 0)
@@ -57,7 +59,7 @@ namespace alquiler_de_autos.controllers
             }
         }
 
-        public void ExportarReporte(List<Reserva> reservas)
+        public static void ExportarReporte()
         {
             List<string> lineas = new List<string>();
             lineas.Add("Reporte de reservas");
@@ -70,6 +72,20 @@ namespace alquiler_de_autos.controllers
     
             exportador.ExportarTXT(lineas, "reporteAlquileres.txt");
             Console.WriteLine("Archivo ' reporteAlquileres.txt' exportado con éxito.");
+        }
+
+        public static void Menu()
+        {
+            Console.Clear();
+            string[] opciones = {"Vehiculos más usados","Clientes que más alquilan","Exportar reporte","Volver"};
+            int seleccion = Herramienta.MenuSeleccionar(opciones,1,"Gestión deReportes");
+            switch(seleccion)
+            {
+                case 1: VehiculosMasUsados(); Menu(); break;
+                case 2: ClientesQueMasAlquilan(); Menu(); break;
+                case 3: ExportarReporte(); Menu(); break;
+                case 4: return;
+            }
         }
     }
 }
