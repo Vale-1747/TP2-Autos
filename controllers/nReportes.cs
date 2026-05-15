@@ -9,17 +9,18 @@ namespace alquiler_de_autos.controllers
     public class nReportes
     {
         private static Exportador exportador = new Exportador();
-        private static List<Reserva> reservas = new List<Reserva>();
-        
+
         public static void VehiculosMasUsados()
         {
             Console.Clear();
-            Console.WriteLine("     --Vehiculos mas usados--     ");
+
+            List<Reserva> reservas = nReserva.GetReservas();
+
+            Console.WriteLine("     --Vehiculos mas usados--     \n");
+
             if (reservas.Count == 0)
             {
                 Console.WriteLine("No hay reservas registradas.");
-                Console.WriteLine("\nPresione una tecla para volver...");
-                Console.ReadKey();
             }
         
             var consulta = reservas
@@ -33,21 +34,22 @@ namespace alquiler_de_autos.controllers
             
             foreach (var item in consulta)
             {
-                Console.WriteLine($"Patente: {item.Patente}, Cantidad de reservas: {item.Cant}, Marca: {item.Auto.marca}, Modelo: {item.Auto.modelo}");
-                Console.WriteLine("\nPresione una tecla para volver...");
-                Console.ReadKey();
+                Console.WriteLine($"Patente: {item.Patente} | Cantidad de reservas: {item.Cant} | Marca: {item.Auto.marca} | Modelo: {item.Auto.modelo}");
             }
+            Console.WriteLine("\nPresione una tecla para volver...");
+            Console.ReadKey();
         }
 
         public static void ClientesQueMasAlquilan()
         {
             Console.Clear();
-            Console.WriteLine("     --Clientes Frecuentes--      ");
+
+            List<Reserva> reservas = nReserva.GetReservas();
+
+            Console.WriteLine("     --Clientes Frecuentes--      \n");
             if (reservas.Count == 0)
             {
                 Console.WriteLine("No hay reservas registradas.");
-                Console.WriteLine("\nPresione una tecla para volver...");
-                Console.ReadKey();
             }
 
             var consulta = reservas
@@ -55,20 +57,24 @@ namespace alquiler_de_autos.controllers
                 .Select(grupo => new { 
                     DNI = grupo.Key, 
                     Cant = grupo.Count(), 
-                    Nombre = grupo.First().cliente.Apellido 
+                    Nombre = $"{grupo.First().cliente.Apellido}, {grupo.First().cliente.Nombre}"
                 })
                 .OrderByDescending(x => x.Cant);
 
             foreach (var item in consulta)
             {
-                Console.WriteLine($"DNI: {item.DNI}, Cantidad de reservas: {item.Cant}, Nombre: {item.Nombre}");
-                Console.WriteLine("\nPresione una tecla para volver...");
-                Console.ReadKey();
+                Console.WriteLine($"DNI: {item.DNI} | Cantidad de reservas: {item.Cant} | Nombre: {item.Nombre}");
             }
+            Console.WriteLine("\nPresione una tecla para volver...");
+            Console.ReadKey();
         }
 
         public static void ExportarReporte()
         {
+            Console.Clear();
+
+            List<Reserva> reservas = nReserva.GetReservas();
+
             List<string> lineas = new List<string>();
             lineas.Add("Reporte de reservas");
             lineas.Add($"Fecha en la que se genera: {DateTime.Now}");
@@ -80,14 +86,22 @@ namespace alquiler_de_autos.controllers
             
             string nombreCarpeta = "exports";
             
-                if (!Directory.Exists(nombreCarpeta))  
-                {
-                    Directory.CreateDirectory(nombreCarpeta);
-                }
+            if (!Directory.Exists(nombreCarpeta))  
+            {
+                Directory.CreateDirectory(nombreCarpeta);
+            }
 
-                using (StreamWriter writer = new StreamWriter("exports/reporteAlquileres.csv"))
+            using (StreamWriter writer = new StreamWriter("exports/reporteAlquileres.csv"))
+            {
+                foreach(string linea in lineas)
+                {
+                    writer.WriteLine(linea);
+                }
+            }
     
-            Console.WriteLine("Archivo ' reporteAlquileres' exportado con éxito.");
+            Console.WriteLine("\nArchivo 'reporteAlquileres.csv' exportado con éxito.");
+            Console.WriteLine("\nPresione una tecla para volver...");
+            Console.ReadKey();
         }
 
         public static void Menu()

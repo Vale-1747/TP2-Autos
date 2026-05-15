@@ -147,21 +147,21 @@ namespace alquiler_de_autos.controllers
         public static void listarVehiculos()
         {
             Console.Clear();
+            Console.WriteLine("      --Lista de vehículos--      \n");
 
             if (listaVehiculos.Count == 0)
             {
                 Console.WriteLine("No hay vehículos registrados.");
-                Console.WriteLine("\nPresione una tecla para volver...");
-                Console.ReadKey();
             }
-
-            Console.WriteLine("      --Lista de vehículos--      ");
-            foreach (Vehiculo v in listaVehiculos)
+            else
             {
-                Console.WriteLine(v);
-                Console.WriteLine("\nPresione una tecla para volver...");
-                Console.ReadKey();
+                foreach (Vehiculo v in listaVehiculos)
+                {
+                    Console.WriteLine(v);
+                }
             }
+            Console.WriteLine("\nPresione una tecla para volver...");
+            Console.ReadKey();
         }
 
         public static void exportarVehiculos()
@@ -178,19 +178,62 @@ namespace alquiler_de_autos.controllers
                 Directory.CreateDirectory(nombreCarpeta);
             }
 
-            StreamWriter archivo = new StreamWriter("exports/vehiculos.csv");
-
-            archivo.WriteLine("Lista de vehículos:");
-            
-            foreach (Vehiculo v in listaVehiculos)
+            using (StreamWriter archivo = new StreamWriter("exports/vehiculos.csv"))
             {
-                archivo.WriteLine("------------------------------");
-                archivo.WriteLine(v.ToString());
+                archivo.WriteLine("Patente;Marca;Modelo;Año");
+
+                foreach (Vehiculo v in listaVehiculos)
+                {
+                    archivo.WriteLine($"{v.patente};{v.marca};{v.modelo};{v.anio}");
+                }
             }
 
-            archivo.Close();
-
             Console.WriteLine("Los vehículos se han exportado con éxito.");
+            Console.ReadKey();
+        }
+
+        public static void cargarDesdeArchivo()
+        {
+            string ruta = "exports/vehiculos.csv";
+
+            if(!File.Exists(ruta))
+            {
+                return;                
+            }
+
+            listaVehiculos.Clear();
+
+            try
+            {
+                using (StreamReader reader = new StreamReader(ruta))
+                {
+                    //salteal el encabezado
+                    reader.ReadLine();
+
+                    while(!reader.EndOfStream)
+                    {
+                        string linea = reader.ReadLine();
+                        string[] datos = linea.Split(';');
+
+                        if(datos.Length == 4)
+                        {
+                            Vehiculo v = new Vehiculo
+                            (
+                                datos[0],
+                                datos[1],
+                                datos[2],
+                                int.Parse(datos[3])
+                            );
+
+                            listaVehiculos.Add(v);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al cargar vehículos: " + ex.Message);
+            }
         }
 
         //este metodo verifica que los campos no esten vacios
@@ -238,6 +281,11 @@ namespace alquiler_de_autos.controllers
                 }
             }
             return null;
+        }
+
+        public static List<Vehiculo> obtenerVehiculos()
+        {
+            return listaVehiculos;
         }
 
         public static void Menu()

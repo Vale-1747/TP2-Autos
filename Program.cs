@@ -11,6 +11,10 @@ namespace alquiler_de_autos
         public static Pila<string> historial = new Pila<string>();
         static void Main(string[] args)
         {
+            nCliente.CargarDesdeArchivo();
+            nVehiculo.cargarDesdeArchivo();
+            nReserva.cargarDesdeArchivo();
+
             Menu();
             /*
             Console.WriteLine("Hello, World!");

@@ -12,7 +12,7 @@ namespace alquiler_de_autos.controllers
     public class nCliente
     {
         private static List<Cliente> clientes = new List<Cliente>();
-        private static string rutaArchivo = "clientes_exportados.csv";
+        private static string rutaArchivo = "exports/clientes_exportados.csv";
 
         //para agregar un cliente nuevo
         public static void AgregarCliente()
@@ -50,6 +50,7 @@ namespace alquiler_de_autos.controllers
         public static void ListarClientes()
         {
             Console.Clear();
+            Console.WriteLine("      --Lista de clientes--      \n");
             if (clientes.Count == 0) Console.WriteLine("No hay clientes registrados.");
             else clientes.ForEach(c => Console.WriteLine(c.ToString()));
             Console.WriteLine("\nPresione una tecla para volver...");
@@ -87,6 +88,49 @@ namespace alquiler_de_autos.controllers
         public static Cliente BuscarPorDNI(string dni)
         {
             return clientes.Find(c => c.DNI == dni);
+        }
+
+        public static void CargarDesdeArchivo()
+        {
+            clientes.Clear(); //evita que se dupliquen los clientes en la memoria
+
+            string ruta = "exports/clientes_exportados.csv";
+
+            if (!File.Exists(ruta))
+            {
+                return;
+            }
+
+            try
+            {
+                using (StreamReader reader = new StreamReader(ruta))
+                {
+                    reader.ReadLine();
+
+                    while(!reader.EndOfStream)
+                    {
+                        string linea = reader.ReadLine();
+                        string[] datos = linea.Split(';');
+
+                        if (datos.Length == 4)
+                        {
+                            Cliente cliente = new Cliente
+                            {
+                                DNI = datos[0],
+                                Nombre = datos[1],
+                                Apellido = datos[2],
+                                Email = datos[3]
+                            };
+
+                            clientes.Add(cliente);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al cargar clientes: " + ex.Message);
+            }
         }
         
         public static void Menu()

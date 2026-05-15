@@ -10,24 +10,23 @@ namespace alquiler_de_autos.controllers
     {
         private static List<Reserva> listaReservas { get; set;} = new List<Reserva>();
 
-        private static List<Vehiculo> listaVehiculos { get; set;} = new List<Vehiculo>();
-
-        public List<Reserva> GetReservas()
+        public static List<Reserva> GetReservas()
         {
             return listaReservas;
         }
         public static void listarReservas()
         {
             Console.Clear();
+            Console.WriteLine("      --Lista de reservas--      \n");
             if(listaReservas.Count == 0)
             {
-                Console.WriteLine("No hay reservas registradas.");
-                return;
+                Console.WriteLine("\nNo hay reservas registradas.");
             }
 
             foreach (Reserva r in listaReservas)
             {
-                Console.WriteLine(r);
+                Console.WriteLine(r+"\n");
+
             }
 
             Console.WriteLine("\nPresione una tecla para volver...");
@@ -112,40 +111,122 @@ namespace alquiler_de_autos.controllers
                 return;
             }
 
-            foreach (Vehiculo v in listaVehiculos)
+            bool hayDisponibles = false;
+
+            foreach (Vehiculo v in nVehiculo.obtenerVehiculos())
             {
                 bool ocupado = false;
 
                 foreach (Reserva r in listaReservas)
                 {
-                    if (r.vehiculo.patente == v.patente && fecha >= r.fechaInicio && fecha <= r.fechaFin)
+                    if (r.vehiculo.patente == v.patente && fecha.Date >= r.fechaInicio.Date && fecha.Date <= r.fechaFin.Date)
                     {
                         ocupado = true;
+                        break;
                     }
-                    Console.WriteLine("\nPresione una tecla para volver...");
-                    Console.ReadKey();
                 }
 
                 if (!ocupado)
                 {
                     Console.WriteLine(v);
-                    Console.WriteLine("\nPresione una tecla para volver...");
-                    Console.ReadKey();
+                    hayDisponibles = true;
                 }
+            }
+
+            if(!hayDisponibles)
+            {
+                Console.WriteLine("No hay vehículos disponibles para esa fecha.");
+            }
+
+            Console.WriteLine("\nPresione una tecla para volver...");
+            Console.ReadKey();
+        }
+
+        public static void exportarReservas()
+        {
+            Console.Clear();
+
+            string carpeta = "exports";
+
+            if (!Directory.Exists(carpeta))
+            {
+                Directory.CreateDirectory(carpeta);
+            }
+
+            using (StreamWriter writer = new StreamWriter("exports/reservas.csv"))
+            {
+                writer.WriteLine("DNI;Patente;FechaInicio;FechaFin");
+
+                foreach (Reserva r in listaReservas)
+                {
+                    writer.WriteLine($"{r.cliente.DNI};{r.vehiculo.patente};{r.fechaInicio};{r.fechaFin}");
+                }
+            }
+
+            Console.WriteLine("\nLas reservas se han exportado con éxito.");
+            Console.WriteLine("\nPresione una tecla para volver...");
+            Console.ReadKey();
+        }
+
+        public static void cargarDesdeArchivo()
+        {
+            string ruta = "exports/reservas.csv";
+
+            if (!File.Exists(ruta))
+            {
+                return;
+            }
+
+            listaReservas.Clear();
+
+            try
+            {
+                using (StreamReader reader = new StreamReader(ruta))
+                {
+                    reader.ReadLine();
+
+                    while (!reader.EndOfStream)
+                    {
+                        string linea = reader.ReadLine();
+                        string[] datos = linea.Split(';');
+
+                        if (datos.Length >= 4)
+                        {
+                            string dni = datos[0];
+                            string patente = datos[1];
+
+                            DateTime fechaInicio = DateTime.Parse(datos[2]);
+                            DateTime fechaFin = DateTime.Parse(datos[3]);
+
+                            Cliente cliente = nCliente.BuscarPorDNI(dni);
+                            Vehiculo vehiculo = nVehiculo.buscarVehiculo(patente);
+
+                            if (cliente != null || vehiculo != null) {
+                                Reserva reserva = new Reserva(fechaInicio, fechaFin, cliente, vehiculo);
+                                listaReservas.Add(reserva);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al cargar reservas: " + ex.Message);
             }
         }
 
         public static void Menu()
         {
             Console.Clear();
-            string[] opciones = {"Crear","Listar","Ver Disponibilidad por fecha","Volver"};
+            string[] opciones = {"Crear","Listar","Ver Disponibilidad por fecha","Exportar","Volver"};
             int seleccion = Herramienta.MenuSeleccionar(opciones,1,"Gestión de Reservas");
             switch(seleccion)
             {
                 case 1: crearReserva(); Menu(); break;
                 case 2: listarReservas(); Menu(); break;
                 case 3: vehiculosDisponibles(); Menu(); break;
-                case 4: return;
+                case 4: exportarReservas(); Menu(); break;
+                case 5: return;
             }
         }
 
