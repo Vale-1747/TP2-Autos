@@ -19,11 +19,11 @@ namespace alquiler_de_autos.models
          public override string ToString()
         {
             return
-                "Patente: " + patente +
-                "\nMarca: " + marca +
-                "\nModelo: " + modelo +
-                "\nAño: " + anio +
-                "\nDisponible: " + 
+                "Marca: " + marca +
+                " | Modelo: " + modelo +
+                " | Patente: " + patente +
+                " | Año: " + anio +
+                " | Disponible: " + 
                 (disponible ? "Si" : "No");
         }
     }
